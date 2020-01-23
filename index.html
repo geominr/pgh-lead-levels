@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+    <title>Pittsburgh Residential Lead Levels</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
+<link
+rel="stylesheet"
+href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
+type="text/css"
+/>
+<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+<style>
+.mapboxgl-popup {
+max-width: 400px;
+font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+}
+</style>
+
+<div id="map"></div>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoicmFhbmFuLWciLCJhIjoiY2pyMWF5YzM4MDBseTQzcXEyZ3gxN2xvOSJ9.Jm_gHZ3zcJh2xygKeOdr5w';
+    
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/raanan-g/ck5r16x2117521imqvx91qbt4',
+        center: [-79.967515, 40.439883],
+        zoom: 11.15
+    });
+    console.log(map)
+    map.addControl(
+        new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+    }));
+    map.addControl(new mapboxgl.NavigationControl());  
+    map.on('load', function() {
+    
+    map.on('click', 'pgh-wlls-geocoded-1619-dlmhgb', function(e) {
+        
+        console.log(e.features)
+        var popupdata = "";
+        for (i in e.features){
+            var block = e.features[i].properties.Address;
+            var tdate = e.features[i].properties['ANALYZED ON'];
+            var result = e.features[i].properties['LEAD RESULT'];
+            
+            popupdata = popupdata + "<p><strong>Date: </strong>"+tdate+"</p><p><strong>Block: </strong>"+block+"</p><p><strong>Result: </strong>"+String(result)+" ppb</p><hr>";
+            
+            
+        }
+        
+        var coordinates = e.features[0].geometry.coordinates.slice();
+        
+
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        
+        new mapboxgl.Popup({anchor:'right'})
+            .setLngLat(coordinates)
+            .setHTML(popupdata)
+            .addTo(map);
+    });
+
+    // Change the cursor to a pointer when the mouse is over the places layer.
+    map.on('mouseenter', 'pgh-wlls-geocoded-1619-dlmhgb', function() {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'pgh-wlls-geocoded-1619-dlmhgb', function() {
+        map.getCanvas().style.cursor = '';
+    });    
+    
+    });
+    </script>
+
+ 
+</body>
+</html>
