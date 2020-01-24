@@ -27,17 +27,97 @@ max-width: 400px;
 font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
 }
+    body {
+  margin: 0;
+  padding: 0;
+}
+
+h2,
+h3 {
+  margin: 10px;
+  font-size: 1.2em;
+}
+
+h3 {
+  font-size: 1em;
+}
+
+p {
+  font-size: 0.85em;
+  margin: 10px;
+  text-align: left;
+}
+
+/**
+* Create a position for the map
+* on the page */
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+/**
+* Set rules for how the map overlays
+* (information box and legend) will be displayed
+* on the page. */
+.map-overlay {
+  position: absolute;
+  height: 1600px;
+  bottom: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.8);
+  margin-left: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
+}
+
+#features {
+  top: 0;
+  height: 500px;
+  margin-top: 20px;
+  width: 250px;
+}
+
+#legend {
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 150px;
+  margin-bottom: 40px;
+  width: 100px;
+}
+
+.legend-key {
+  display: inline-block;
+  border-radius: 20%;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
 </style>
 
 <div id="map"></div>
+<div class='map-overlay' id='features'>
+    <h2>Pittsburgh Residential Water Lead Levels</h2>
+    <p><small><a href="http://lead.pgh2o.com/understanding-lead-and-water/" target="_blank">Lead Facts</a>     |   <a href="https://www.amazon.com/Brita-36427-Everyday-Pitchers/dp/B07QG9Q9PB/ref=sxin_3_ac_d_pm?ac_md=4-2-QWJvdmUgJDMw-ac_d_pm&crid=2N5MR1NH4JY77&cv_ct_cx=brita+longlast+filter&keywords=brita+longlast+filter&pd_rd_i=B07QG9Q9PB&pd_rd_r=4d167b3e-77f0-49bf-b678-ae3af51d0626&pd_rd_w=Ogrta&pd_rd_wg=1ynnb&pf_rd_p=b8b03b37-bd30-4468-adff-11c42ccb6582&pf_rd_r=W7AGFRFEA78V4ZNAPXYE&psc=1&qid=1579891676&sprefix=brit%2Caps%2C173&sr=1-3-22d05c05-1231-4126-b7c4-3e7a9c0027d0" target="_blank">Buy a Filter</a>    |  <a href="http://lead.pgh2o.com/resources/customer-water-quality-data/" target="_blank">Map Data</a></small></p>
+    <p><small><a href="https://www.cdc.gov/nceh/lead/prevention/default.htm?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fnceh%2Flead%2Fparents.htm" target="_blank">Info for Parents</a>  | <a href="https://alleghenycounty.us/Health-Department/Programs/Special-Initiatives/Lead/Testing.aspx" target="_blank">Blood Testing</a></small></p>
+    <p><small>Each point on the map represents a block where voluntary residential water tests have taken place. Search your address to see nearby water lead levels. Negative results are not 100% reliable. No amount of lead in drinking water is safe.</small></p>
+    <p><small><b>Use a water filter that is <a href="https://www.epa.gov/sites/production/files/2018-12/documents/consumer_tool_for_identifying_drinking_water_filters_certified_to_reduce_lead.pdf" target="_blank">certified to remove lead</a>.</b> For information about free water pitchers and filters, visit the <a href="http://womenforahealthyenvironment.org/water-pitchers-and-filters.html" target="_blank">Women for a Healthy Environment</a> website.</small></p>
+    
+    <hr>
+    <div id='pd'><p>Click a point on the map to see test results.</p></div></div>
+<!--<div class='map-overlay' id='legend'></div>-->
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoicmFhbmFuLWciLCJhIjoiY2pyMWF5YzM4MDBseTQzcXEyZ3gxN2xvOSJ9.Jm_gHZ3zcJh2xygKeOdr5w';
     
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/raanan-g/ck5r16x2117521imqvx91qbt4',
-        center: [-79.967515, 40.439883],
-        zoom: 11.15
+        center: [-79.979515, 40.45303],
+        zoom: 11.65
     });
     console.log(map)
     map.addControl(
@@ -45,12 +125,16 @@ font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl
     }));
-    map.addControl(new mapboxgl.NavigationControl());  
+    map.addControl(new mapboxgl.NavigationControl()); 
+    
+    
+    
+    
     map.on('load', function() {
     
     map.on('click', 'pgh-wlls-geocoded-1619-dlmhgb', function(e) {
         
-        console.log(e.features)
+        //console.log(e.features)
         var popupdata = "";
         for (i in e.features){
             var block = e.features[i].properties.Address;
@@ -72,10 +156,10 @@ font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
         
-        new mapboxgl.Popup({anchor:'right'})
-            .setLngLat(coordinates)
-            .setHTML(popupdata)
-            .addTo(map);
+        //new mapboxgl.Popup({anchor:'right'}).setLngLat(coordinates).setHTML(popupdata).addTo(map);
+        
+        document.getElementById('pd').innerHTML = popupdata;
+        
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer.
