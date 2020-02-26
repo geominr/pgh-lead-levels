@@ -113,7 +113,7 @@ p {
     <hr>
     <div id='pd'><p><strong>Click a point on the map to see test results.</strong></p></div></div>
 <!--<div class='map-overlay' id='legend'></div>-->
-<script>			
+<script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoicmFhbmFuLWciLCJhIjoiY2pyMWF5YzM4MDBseTQzcXEyZ3gxN2xvOSJ9.Jm_gHZ3zcJh2xygKeOdr5w';
     
     var map = new mapboxgl.Map({
@@ -135,14 +135,14 @@ p {
     
     map.on('load', function() {
     
-    map.on('click', 'pgh-wlls-geocoded-1619-dlmhgb', function(e) {
+    map.on('click', 'pgh-wlls-geocoded-2016-2020-0e27rw', function(e) {
         
         //console.log(e.features)
         var popupdata = "";
         for (i in e.features){
             var block = e.features[i].properties.Address;
-            var tdate = e.features[i].properties['ANALYZED ON'];
-            var result = e.features[i].properties['LEAD RESULT'];
+            var tdate = e.features[i].properties['Analyze Date'];
+            var result = e.features[i].properties['Sample Result (ppb)'];
             
             popupdata = popupdata + "<p><strong>Date: </strong>"+tdate+"</p><p><strong>Block: </strong>"+block+"</p><p><strong>Result: </strong>"+String(result)+" ppb</p><hr>";
             
@@ -166,12 +166,12 @@ p {
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer.
-    map.on('mouseenter', 'pgh-wlls-geocoded-1619-dlmhgb', function() {
+    map.on('mouseenter', 'pgh-wlls-geocoded-2016-2020-0e27rw', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
 
     // Change it back to a pointer when it leaves.
-    map.on('mouseleave', 'pgh-wlls-geocoded-1619-dlmhgb', function() {
+    map.on('mouseleave', 'pgh-wlls-geocoded-2016-2020-0e27rw', function() {
         map.getCanvas().style.cursor = '';
     });    
     
