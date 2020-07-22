@@ -140,7 +140,7 @@ p {
     
     map.on('load', function() {
     
-    map.on('click', 'pgh-blocks-wlls-2020', function(e) {
+    map.on('click', 'pgh-block-wlls-2020', function(e) {
         
         //console.log(e.features)
         var popupdata = "";
@@ -174,12 +174,12 @@ p {
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer.
-    map.on('mouseenter', 'pgh-blocks-wlls-2020', function() {
+    map.on('mouseenter', 'pgh-block-wlls-2020', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
 
     // Change it back to a pointer when it leaves.
-    map.on('mouseleave', 'pgh-blocks-wlls-2020', function() {
+    map.on('mouseleave', 'pgh-block-wlls-2020', function() {
         map.getCanvas().style.cursor = '';
     });    
     
