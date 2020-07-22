@@ -135,16 +135,19 @@ p {
     
     map.on('load', function() {
     
-    map.on('click', 'pgh-wlls-geocoded-2016-2020-0e27rw', function(e) {
+    map.on('click', 'pgh-blocks-wlls-2020', function(e) {
         
         //console.log(e.features)
         var popupdata = "";
         for (i in e.features){
-            var block = e.features[i].properties.Address;
-            var tdate = e.features[i].properties['Analyze Date'];
-            var result = e.features[i].properties['Sample Result (ppb)'];
-            
-            popupdata = popupdata + "<p><strong>Date: </strong>"+tdate+"</p><p><strong>Block: </strong>"+block+"</p><p><strong>Result: </strong>"+String(result)+" ppb</p><hr>";
+            var block = e.features[i].properties.BLOCK;
+            var latest = e.features[i].properties.latest;
+            var min = e.features[i].properties.Pb_min;
+            var max = e.features[i].properties.Pb_max;
+	    var med = e.features[i].properties['Pb_50%'];
+	    var n = e.features[i].properties['n'];
+
+            popupdata = popupdata + "<p><strong>Block: </strong>"+block+"</p><p><strong>Total Samples: </strong>"+n+"</p><p><strong>Median Lead Level: </strong>"+String(med)+" ppb</p><p><strong>Low: </strong>"+String(min)+" ppb</p><p><strong>High: </strong>"+String(max)+" ppb</p><p><strong>Latest: </strong>"+latest+"</p><hr>";
             
             
         }
@@ -166,12 +169,12 @@ p {
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer.
-    map.on('mouseenter', 'pgh-wlls-geocoded-2016-2020-0e27rw', function() {
+    map.on('mouseenter', 'pgh-blocks-wlls-2020', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
 
     // Change it back to a pointer when it leaves.
-    map.on('mouseleave', 'pgh-wlls-geocoded-2016-2020-0e27rw', function() {
+    map.on('mouseleave', 'pgh-blocks-wlls-2020', function() {
         map.getCanvas().style.cursor = '';
     });    
     
