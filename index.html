@@ -71,6 +71,7 @@ p {
 * on the page. */
 .map-overlay {
   position: absolute;
+  width: 400px;
   bottom: 0;
   left: 0;
   background: rgba(255, 255, 255, 0.8);
@@ -85,13 +86,11 @@ p {
   position: absolute;
   height: 38%;
   margin-top: 10px;
-  width: 25%;
 }
 #features {
   top: 38%;
   bottom: 30px;
   margin-top: 10px;
-  width: 25%;
 }
 
 #legend {
@@ -114,7 +113,7 @@ p {
 
 <div id="map"></div>
 <div class='map-overlay' id='headline'>
-    <div id='pd'><center>
+    <div><center>
 	<h2>Pittsburgh Residential Water Lead Levels</h2>
     	<div class="tag-cloud">
 	    <a href="http://lead.pgh2o.com/understanding-lead-and-water/" target="_blank">Lead Facts</a>
@@ -126,11 +125,13 @@ p {
     	</div></center>
     <p>Each point on the map represents a block where voluntary residential water tests have taken place. Search your address to see nearby water lead levels.</p>
     <p><b>No amount of lead in drinking water is safe.</b> Use a water filter that is <a href="https://www.epa.gov/sites/production/files/2018-12/documents/consumer_tool_for_identifying_drinking_water_filters_certified_to_reduce_lead.pdf" target="_blank">certified to remove lead</a>. For information about free water pitchers and filters, visit the <a href="http://womenforahealthyenvironment.org/water-pitchers-and-filters.html" target="_blank">Women for a Healthy Environment</a> website.</p>
-    <hr>
+    
     </div>
 </div>
 <div class='map-overlay' id='features'>
+	<div id="pd">
 	<p><strong>Click a point on the map to view lead levels</strong></p>
+	</div>
 </div>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoicmFhbmFuLWciLCJhIjoiY2pyMWF5YzM4MDBseTQzcXEyZ3gxN2xvOSJ9.Jm_gHZ3zcJh2xygKeOdr5w';
@@ -166,7 +167,7 @@ p {
 	    var med = e.features[i].properties['Pb_50%'];
 	    var n = e.features[i].properties['n'];
 
-            popupdata = popupdata + "<h4>"+block+"</h4><p><strong>Total Samples: </strong>"+n+"</p><p><strong>Median Lead Level: </strong>"+String(med)+" ppb</p><p><strong>Low: </strong>"+String(min)+" ppb</p><p><strong>High: </strong>"+String(max)+" ppb</p><p><strong>Latest: </strong>"+latest+"</p><hr>";
+            popupdata = popupdata + "<h3>"+block+"</h3><p><strong>Total Samples: </strong>"+n+"</p><p><strong>Median Lead Level: </strong>"+String(med)+" ppb</p><p><strong>Low: </strong>"+String(min)+" ppb</p><p><strong>High: </strong>"+String(max)+" ppb</p><p><strong>Latest: </strong>"+latest+"</p><hr>";
             
             
         }
