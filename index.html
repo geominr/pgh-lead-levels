@@ -84,12 +84,26 @@ p {
 #headline {
   top: 0;
   position: absolute;
-  height: 360px;
+  height: 460px;
   margin-top: 10px;
 }
+.mapboxgl-popup-content {
+  color: #d3d3d3;
+  line-height: 1;
+  background: rgba(29, 38, 32, 0.75);
+/*  background: linear-gradient(6deg, rgba(4,17,4,1) 0%, rgba(5,71,29,1) 37%, rgba(0,0,0,0.43601190476190477) 100%);*/
+  margin: 10;
+}
+.mapboxgl-popup-close-button {
+		color:#d0d0d0
+}
+.mapboxgl-popup {
+	max-width: 440px;
+}
+	
 #features {
-  top: 360px;
-  bottom: 30px;
+  top: 48%;
+  bottom: 2%;
   margin-top: 10px;
 }
 
@@ -115,15 +129,16 @@ p {
 <div class='map-overlay' id='headline'>
     <center>
     <h2>Pittsburgh Residential Water Lead Levels</h2>
-    <div>
-    <div class="tag-cloud">
-	    <a href="http://lead.pgh2o.com/understanding-lead-and-water/" target="_blank">Lead Facts</a>
-	    <a href="https://www.zerowater.com/resources/ZW-180821-01_coupon-sheet_eng_print.pdf" target="_blank">Buy a Filter</a>
-	    <a href="https://www.pgh2o.com/leadform">Water Tests</a>
-	    <a href="https://www.cdc.gov/nceh/lead/prevention/default.htm?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fnceh%2Flead%2Fparents.htm" target="_blank">Info for Parents</a>
-	    <a href="https://alleghenycounty.us/Health-Department/Programs/Special-Initiatives/Lead/Testing.aspx" target="_blank">Blood Tests</a>
-	    <a href="http://lead.pgh2o.com/resources/customer-water-quality-data/" target="_blank">Data</a>
-    </div><div></center>
+    
+    <a class="btn btn-sm btn-outline-brand" style="width:48%" href="http://lead.pgh2o.com/understanding-lead-and-water/" target="_blank">Lead Facts</a>
+	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="https://www.zerowater.com/resources/ZW-180821-01_coupon-sheet_eng_print.pdf" target="_blank">Buy a Filter</a>
+	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="https://www.pgh2o.com/leadform">Water Tests</a>
+	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="https://www.cdc.gov/nceh/lead/prevention/default.htm?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fnceh%2Flead%2Fparents.htm" target="_blank">Info for Parents</a>
+	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="https://alleghenycounty.us/Health-Department/Programs/Special-Initiatives/Lead/Testing.aspx" target="_blank">Blood Tests</a>
+	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="http://lead.pgh2o.com/resources/customer-water-quality-data/" target="_blank">Data</a>
+    <hr><h6>Click on a point to view lead levels</h6>
+	</center>
+	
     <p>Each point on the map represents a block where voluntary residential water tests have taken place between 2016 and 2020. Red points 
 	    represent blocks with the highest lead levels and green points with the lowest. Larger points indicate blocks where more samples have been taken. 
 	    Search your address to see nearby water lead levels.</p>
@@ -131,11 +146,8 @@ p {
     
     
 </div>
-<div class='map-overlay' id='features'>
-	<div id="pd">
-	<p><strong>Click a point on the map to view lead levels</strong></p>
-	</div>
-</div>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoicmFhbmFuLWciLCJhIjoiY2pyMWF5YzM4MDBseTQzcXEyZ3gxN2xvOSJ9.Jm_gHZ3zcJh2xygKeOdr5w';
     
@@ -152,32 +164,41 @@ p {
         mapboxgl: mapboxgl
     }));
     map.addControl(new mapboxgl.NavigationControl()); 
-    
-    
-    
-    
+    var format0 = d3.format(",.0f");
+	function counter(x, title, size) {
+		
+		if (title == "Total Samples") {
+			var color = "#d3d3d3"
+		}
+		else {
+			if (x < 5) {
+				var color = "#14d217";
+			} 
+			else if (x < 10) {
+				var color = "#efdc61";
+			}
+			else if (x < 15) {
+				var color = "#e28008";
+			}
+			else {
+				var color = "#b10606";
+			}
+		}
+		
+		return "<div class=\"col-md-"+size+"\">\
+					<center><div class=\"counter-number\">\
+					   <h1 style=\"color:"+color+"; margin:0px; padding-top:5px\"><strong>"+x+"</strong></h1>\
+					</div>\
+				   <small style=\"position:inline-block\">"+title+"</small></center>\
+				</div>";
+	}
+
     map.on('load', function() {
     
     map.on('click', 'pgh-block-wlls-2020', function(e) {
         
-        //console.log(e.features)
-        var popupdata = "";
-        for (i in e.features){
-            var block = e.features[i].properties.BLOCK;
-            var latest = e.features[i].properties.latest;
-            var min = e.features[i].properties.Pb_min;
-            var max = e.features[i].properties.Pb_max;
-	    var med = e.features[i].properties['Pb_50%'];
-	    var n = e.features[i].properties['n'];
-
-            popupdata = popupdata + "<h3>"+block+"</h3><p><strong>Total Samples: </strong>"+n+"</p><p><strong>Median Lead Level: </strong>"+String(med)+" ppb</p><p><strong>Low: </strong>"+String(min)+" ppb</p><p><strong>High: </strong>"+String(max)+" ppb</p><p><strong>Latest: </strong>"+latest+"</p><hr>";
-            
-            
-        }
         
         var coordinates = e.features[0].geometry.coordinates.slice();
-        
-
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
         // over the copy being pointed to.
@@ -185,11 +206,40 @@ p {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
         
-        //new mapboxgl.Popup({anchor:'right'}).setLngLat(coordinates).setHTML(popupdata).addTo(map);
+        //console.log(e.features)
+        var popupdata = "";
         
-        document.getElementById('features').innerHTML = popupdata;
-        
-    });
+        var coordinates = e.features[0].geometry.coordinates.slice();
+
+		var block = e.features[0].properties.BLOCK;
+		var latest = e.features[0].properties.latest;
+		var n = counter(String(e.features[0].properties['n']), 
+									"Total Samples", 6);
+		var min = counter(String(e.features[0].properties.Pb_min), 
+									"Lowest (parts per billion)", 6);
+		var max = counter(String(e.features[0].properties.Pb_max), 
+									"Highest (parts per billion)", 6);
+		var med = counter(String(format0(e.features[0].properties['Pb_50%'])), 
+									"Median (parts per billion)", 6);
+
+		popupdata = `<center><h6 style="color:white">Lead Test Results:</h6></center>
+						<center><h5 style="color:white">`+ block +`</h5>
+						<h6 style="color:white">Latest: `+ latest +`</h6></center>
+						<hr><div class='row'>` + n + med + min + max + `
+						</div>`;
+
+		// Populate the popup and set its coordinates
+		// based on the feature found.
+		popup.setLngLat(coordinates).setHTML(popupdata).addTo(map);
+
+		
+	});
+	// Create a popup, but don't add it to the map yet.
+	var popup = new mapboxgl.Popup({
+		offset: 10,
+		closeButton: true,
+		closeOnClick: false
+	});
 
     // Change the cursor to a pointer when the mouse is over the places layer.
     map.on('mouseenter', 'pgh-block-wlls-2020', function() {
