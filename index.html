@@ -72,9 +72,11 @@ p {
 .map-overlay {
   position: absolute;
   width: 400px;
-  bottom: 0;
+  height: 98%;
+  bottom: 1%;
+  top: 1%;
   left: 0;
-  background: rgba(255, 255, 255);
+  background: rgba(255,255,255,0.95);
   margin-left: 10px;
   overflow: auto;
   border-radius: 3px;
@@ -84,7 +86,7 @@ p {
 #headline {
   top: 0;
   position: absolute;
-  height: 460px;
+  
   margin-top: 10px;
 }
 .mapboxgl-popup-content {
@@ -108,10 +110,7 @@ p {
 
 .legend {
   font-size: 20px;
-  background: rgba(255,255,255,0.95);
-  position: absolute;
   padding: 10px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   line-height: 18px;
   height: 200px;
   margin-bottom: 40px;
@@ -143,27 +142,21 @@ width: 10px;
 <div id="map"></div>
 <div class='map-overlay' id='headline'>
     <center>
-    <h2>Pittsburgh Residential Water Lead Levels</h2>
-    
+    <h2 style="padding: 10px">Pittsburgh Residential Water Lead Levels by City Block</h2>
+
     <a class="btn btn-sm btn-outline-brand" style="width:48%" href="http://lead.pgh2o.com/understanding-lead-and-water/" target="_blank">Lead Facts</a>
 	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="https://www.zerowater.com/resources/ZW-180821-01_coupon-sheet_eng_print.pdf" target="_blank">Buy a Filter</a>
 	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="https://www.pgh2o.com/leadform">Water Tests</a>
 	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="https://www.cdc.gov/nceh/lead/prevention/default.htm?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fnceh%2Flead%2Fparents.htm" target="_blank">Info for Parents</a>
 	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="https://alleghenycounty.us/Health-Department/Programs/Special-Initiatives/Lead/Testing.aspx" target="_blank">Blood Tests</a>
 	<a class="btn btn-sm btn-outline-brand" style="width:48%" href="http://lead.pgh2o.com/resources/customer-water-quality-data/" target="_blank">Data</a>
-    <hr><h6>Click on a point to view lead levels</h6>
+    <br>
 	</center>
-	
-    <p>Each point on the map represents a block where at least one voluntary residential water test has taken place, between 2016 and 2020. Darker points 
-	    represent blocks with the highest lead levels and lighter points with the lowest. Larger points indicate blocks where more samples have been taken. 
-	    Search your address to see nearby water lead levels.</p>
+	<center><h6 style="padding: 10px">Click on a point to view lead levels</h6></center>
     <p><b>No amount of lead in drinking water is safe.</b> Use a water filter that is <a href="https://www.epa.gov/sites/production/files/2018-12/documents/consumer_tool_for_identifying_drinking_water_filters_certified_to_reduce_lead.pdf" target="_blank">certified to remove lead</a>. For information about free water pitchers and filters, visit the <a href="http://womenforahealthyenvironment.org/water-pitchers-and-filters.html" target="_blank">Women for a Healthy Environment</a> website.</p>
-    
-    
-</div>
-<div id="state-legend" class="legend">
-	<center><h6 style="color: black">Median Water Lead Levels by Block</h6></center>
-	<table style="width:90%;text-align: center; margin: 12px">
+    <p>All data has been anonymized to protect the privacy of residents and water customers.</p>
+	
+	<table style="width:90%;text-align: center; margin: 12px" class="legend">
 	<tr><td><small>Color</small></td>
 		<td></td>
 		<td><small>Size</small></td>
@@ -189,7 +182,11 @@ width: 10px;
 		<td> 1</td>
 	  </tr>
 	</table>
+	<br>
+	<p>Data Source: <a href="http://lead.pgh2o.com/resources/customer-water-quality-data/">Pittsburgh Water and Sewer Authority</a>
+    <br><small>Map by Raanan Gurewitsch</small></p>
 </div>
+
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoicmFhbmFuLWciLCJhIjoiY2pyMWF5YzM4MDBseTQzcXEyZ3gxN2xvOSJ9.Jm_gHZ3zcJh2xygKeOdr5w';
